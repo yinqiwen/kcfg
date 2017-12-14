@@ -1,7 +1,7 @@
 /*
  * kcfg.hpp
  *
- *  Created on: 2017Äê12ÔÂ14ÈÕ
+ *  Created on: 2017ï¿½ï¿½12ï¿½ï¿½14ï¿½ï¿½
  *      Author: qiyingwang
  */
 
@@ -360,7 +360,7 @@ namespace kcfg
     void Serialize(rapidjson::Value& json, rapidjson::Value::AllocatorType& allocator, const char* name, const T& v)
     {
         rapidjson::Value json_value(rapidjson::kObjectType);
-        v.WriteToJson(json_value);
+        v.WriteToJson(json_value, &allocator);
         addJsonMember(json, allocator, name, json_value);
     }
 
@@ -492,10 +492,12 @@ namespace kcfg
             const std::list<K>& v)
     {
         rapidjson::Value json_value(rapidjson::kArrayType);
-        for (size_t i = 0; i < v.size(); i++)
+        typename std::list<K>::const_iterator cit = v.begin();
+        while(cit != v.end())
         {
-            const K& vv = v[i];
-            Serialize(json_value, allocator, "", vv);
+        	const K& vv = *cit;
+        	 Serialize(json_value, allocator, "", vv);
+        	cit++;
         }
         addJsonMember(json, allocator, name, json_value);
     }
@@ -569,9 +571,10 @@ namespace kcfg
          FOR_EACH(PARSE_JSON, __VA_ARGS__)\
          return true; \
     } \
-    void WriteToJson(rapidjson::Value& json) const \
+    void WriteToJson(rapidjson::Value& json, rapidjson::Value::AllocatorType* alloc = NULL) const \
     {  \
-          rapidjson::Value::AllocatorType allocator;\
+    	  rapidjson::Value::AllocatorType defaultAlloc; \
+          rapidjson::Value::AllocatorType& allocator = (NULL == alloc)?defaultAlloc:(*alloc);\
           FOR_EACH(SERIALIZE_JSON, __VA_ARGS__)  \
     } \
 

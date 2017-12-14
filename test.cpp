@@ -1,7 +1,7 @@
 /*
  * test.cpp
  *
- *  Created on: 2017Äê12ÔÂ14ÈÕ
+ *  Created on: 2017ï¿½ï¿½12ï¿½ï¿½14ï¿½ï¿½
  *      Author: qiyingwang
  */
 #include "kcfg.hpp"
@@ -16,7 +16,7 @@ struct ConfigItem
 {
         int v0;
         int y0;
-        KCFG_DEFINE_FIELDS(v0);
+        KCFG_DEFINE_FIELDS(v0, y0);
 };
 
 struct Config
