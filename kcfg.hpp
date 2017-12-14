@@ -559,7 +559,7 @@ namespace kcfg
      9,8,7,6,5,4,3,2,1,0
 
 #define FOR_EACH_(N, what, x, ...) CONCATENATE(FOR_EACH_, N)(what, x, __VA_ARGS__)
-#define FOR_EACH(what, x, ...) FOR_EACH_(__NARG__(x, __VA_ARGS__), what, x, __VA_ARGS__)
+#define FOR_EACH(what, ...) FOR_EACH_(__NARG__(__VA_ARGS__), what, __VA_ARGS__)
 #define PARSE_JSON(field)   kcfg::Parse(json, #field, field)
 #define SERIALIZE_JSON(field)   kcfg::Serialize(json, allocator, #field, field)
 #define PRN_FIELD(field)  printf("%s\n", #field)
