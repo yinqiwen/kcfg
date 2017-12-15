@@ -7,6 +7,10 @@ A C++ json config mapping library.
 
 [rapidjson](https://github.com/Tencent/rapidjson)
 
+## Limit
+- Only works with GCC
+- Max 64 fields in a struct/class
+
 ## Example
 
 ```cpp
