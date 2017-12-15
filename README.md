@@ -57,6 +57,6 @@ int main(int argc, char *argv[])
 }
 ```
 
-## Embedding geohash-int
+## Embedding kcfg
 
 Just copy [kcfg.hpp](https://github.com/yinqiwen/kcfg/blob/master/kcfg.hpp)  into your project. 
