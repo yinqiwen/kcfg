@@ -1,16 +1,34 @@
 /*
- * test.cpp
+ *Copyright (c) 2017-2017, yinqiwen <yinqiwen@gmail.com>
+ *All rights reserved.
  *
- *  Created on: 2017��12��14��
- *      Author: qiyingwang
+ *Redistribution and use in source and binary forms, with or without
+ *modification, are permitted provided that the following conditions are met:
+ *
+ *  * Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ *  * Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *  * Neither the name of Redis nor the names of its contributors may be used
+ *    to endorse or promote products derived from this software without
+ *    specific prior written permission.
+ *
+ *THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ *AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ *IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ *ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
+ *BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ *CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ *SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ *INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ *CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ *ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
+ *THE POSSIBILITY OF SUCH DAMAGE.
  */
+
+
 #include "kcfg.hpp"
-#include <vector>
-#include <map>
-#include <iostream>
-#include <sstream>
-#include "rapidjson/writer.h"
-#include "rapidjson/stringbuffer.h"
 
 struct ConfigItem
 {
@@ -33,85 +51,38 @@ struct Config
                 : x(0), y(0), z(0)
         {
         }
-        std::string ToString()
-        {
-            std::stringstream str;
-            str << "x=" << x << ", y=" << y << ", z=" << z << ", aa=" << aa.c_str();
-            str << ", v2=[";
-            for (int i = 0; i < v2.size(); i++)
-            {
-                str << v2[i];
-                if (i != v2.size() - 1)
-                {
-                    str << ",";
-                }
-            }
-            str << "], ";
-            str << "m1={";
-            auto iter = m1.begin();
-            while (iter != m1.end())
-            {
-                if (iter != m1.begin())
-                {
-                    str << ",";
-                }
-                str << iter->first << "->" << iter->second;
-                iter++;
-            }
-            str << "}";
-            str << "\n";
-            return str.str();
-        }
 };
-
-//#include <stdio.h>
-//#include <stddef.h>
-//
-//struct a
-//{
-//  int a;
-//  int b;
-//  int c;
-//};
-//
-
-//#include <stdio.h>
-
-//
-//#define PRN_STRUCT_OFFSETS_(structure, field) printf(STRINGIZE(structure)":"STRINGIZE(field)" - offset = %d\n", offsetof(structure, field));
-//#define PRN_STRUCT_OFFSETS(field) PRN_STRUCT_OFFSETS_(struct a, field)
-//#define PRN_FIELD(field)  printf("%s\n", #field)
 
 
 int main(int argc, char *argv[])
 {
 
-//  FOR_EACH(PRN_FIELD,  a, b, aa);
-    //printf("%d\n", __NARG__(1,2,3,4,5, 7,8, a, b, aa));
     std::string json = "{\"x\":1, \"y\":101, \"z\":2.1, \"aa\":\"val\", \"m1\":{\"k1\":102}, \"v2\":[\"v0\"]}";
-    rapidjson::Document d;
-    d.Parse<0>(json.c_str());
-    if (d.HasParseError())
-    {
-        return -1;
-    }
+
     Config cfg;
-    cfg.PraseFromJson(d);
-    printf("%s\n", cfg.ToString().c_str());
+    kcfg::ParseFromJsonString(json, cfg);
 
     cfg.v2.push_back("testa");
     cfg.v2.push_back("testv");
     cfg.v3.resize(2);
     cfg.v3[0].v0 = 101;
     cfg.v3[1].y0 = 987;
-    rapidjson::Value tmp(rapidjson::kObjectType);
-    cfg.WriteToJson(tmp);
-    rapidjson::StringBuffer buffer;
-    rapidjson::Writer < rapidjson::StringBuffer > writer(buffer);
-    tmp.Accept(writer);
     std::string kstr;
-    kstr.append(buffer.GetString(), buffer.GetSize());
+    kcfg::WriteToJsonString(cfg, kstr);
     printf("%s\n",kstr.c_str());
+
+//    std::string macros;
+//    for( int i = 1; i < 64; i++)
+//    {
+//        char buffer[1024];
+//        sprintf(buffer, "#define KCFG_FOR_EACH_%d(what, x, ...)\\", i+1);
+//        macros.append(buffer).append("\n");
+//        macros.append("  what(x);\\").append("\n");
+//        sprintf(buffer, "  KCFG_FOR_EACH_%d(what,  __VA_ARGS__)", i);
+//        macros.append(buffer).append("\n");
+//    }
+//
+//    printf("%s\n",macros.c_str());
 
     return 0;
 }
