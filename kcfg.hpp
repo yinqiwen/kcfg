@@ -386,7 +386,7 @@ namespace kcfg
     void Serialize(rapidjson::Value& json, rapidjson::Value::AllocatorType& allocator, const char* name, const T& v)
     {
         rapidjson::Value json_value(rapidjson::kObjectType);
-        v.WriteToJson(json_value, &allocator);
+        v.WriteToJson(json_value, allocator);
         addJsonMember(json, allocator, name, json_value);
     }
 
@@ -410,7 +410,7 @@ namespace kcfg
     void Serialize(rapidjson::Value& json, rapidjson::Value::AllocatorType& allocator, const char* name,
             const std::string& v)
     {
-        rapidjson::Value json_value(v.c_str(), v.size());
+        rapidjson::Value json_value(v.c_str(), v.size(),allocator);
         addJsonMember(json, allocator, name, json_value);
     }
 
@@ -575,10 +575,11 @@ namespace kcfg
     template<typename T>
     int WriteToJsonString(const T& v, std::string& content)
     {
+        rapidjson::Value::AllocatorType allocator;
         rapidjson::Value doc(rapidjson::kObjectType);
-        v.WriteToJson(doc);
+        v.WriteToJson(doc, allocator);
         rapidjson::StringBuffer buffer;
-        rapidjson::Writer <rapidjson::StringBuffer> writer(buffer);
+        rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
         doc.Accept(writer);
         content.assign(buffer.GetString(), buffer.GetSize());
         return 0;
@@ -834,10 +835,8 @@ namespace kcfg
          KCFG_FOR_EACH(KCFG_PARSE_JSON, __VA_ARGS__)\
          return true; \
     } \
-    void WriteToJson(rapidjson::Value& json, rapidjson::Value::AllocatorType* alloc = NULL) const \
+    void WriteToJson(rapidjson::Value& json, rapidjson::Value::AllocatorType& allocator) const \
     {  \
-    	  rapidjson::Value::AllocatorType defaultAlloc; \
-          rapidjson::Value::AllocatorType& allocator = (NULL == alloc)?defaultAlloc:(*alloc);\
           KCFG_FOR_EACH(KCFG_SERIALIZE_JSON, __VA_ARGS__)  \
     } \
 
