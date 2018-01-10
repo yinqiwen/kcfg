@@ -43,9 +43,9 @@
 
 namespace kcfg
 {
-    const rapidjson::Value* getJsonFiledValue(const rapidjson::Value& json, const char* name)
+    inline const rapidjson::Value* getJsonFiledValue(const rapidjson::Value& json, const char* name)
     {
-        if (name == "")
+        if (!name[0])
         {
             return &json;
         }
@@ -58,22 +58,22 @@ namespace kcfg
     }
 
     template<typename T>
-    bool Parse(const rapidjson::Value& json, const char* name, T& v)
+    inline bool Parse(const rapidjson::Value& json, const char* name, T& v)
     {
         const rapidjson::Value* val = getJsonFiledValue(json, name);
         if (NULL == val)
         {
             return false;
         }
-        if (val->IsObject())
+        if (!val->IsObject())
         {
             return false;
         }
-        return v.PraseFromJson(json);
+        return v.PraseFromJson(*val);
     }
 
     template<>
-    bool Parse(const rapidjson::Value& json, const char* name, double& v)
+    inline bool Parse(const rapidjson::Value& json, const char* name, double& v)
     {
         const rapidjson::Value* val = getJsonFiledValue(json, name);
         if (NULL == val)
@@ -89,7 +89,7 @@ namespace kcfg
     }
 
     template<>
-    bool Parse(const rapidjson::Value& json, const char* name, float& v)
+    inline bool Parse(const rapidjson::Value& json, const char* name, float& v)
     {
         const rapidjson::Value* val = getJsonFiledValue(json, name);
         if (NULL == val)
@@ -104,7 +104,7 @@ namespace kcfg
         return true;
     }
     template<>
-    bool Parse(const rapidjson::Value& json, const char* name, std::string& v)
+    inline bool Parse(const rapidjson::Value& json, const char* name, std::string& v)
     {
         const rapidjson::Value* val = getJsonFiledValue(json, name);
         if (NULL == val)
@@ -120,7 +120,7 @@ namespace kcfg
     }
 
     template<>
-    bool Parse(const rapidjson::Value& json, const char* name, uint64_t& v)
+    inline bool Parse(const rapidjson::Value& json, const char* name, uint64_t& v)
     {
         const rapidjson::Value* val = getJsonFiledValue(json, name);
         if (NULL == val)
@@ -143,7 +143,7 @@ namespace kcfg
     }
 
     template<>
-    bool Parse(const rapidjson::Value& json, const char* name, int64_t& v)
+    inline bool Parse(const rapidjson::Value& json, const char* name, int64_t& v)
     {
         const rapidjson::Value* val = getJsonFiledValue(json, name);
         if (NULL == val)
@@ -166,7 +166,7 @@ namespace kcfg
     }
 
     template<>
-    bool Parse(const rapidjson::Value& json, const char* name, int32_t& v)
+    inline bool Parse(const rapidjson::Value& json, const char* name, int32_t& v)
     {
         int64_t vv;
         if (!Parse(json, name, vv))
@@ -181,7 +181,7 @@ namespace kcfg
         return true;
     }
     template<>
-    bool Parse(const rapidjson::Value& json, const char* name, uint32_t& v)
+    inline bool Parse(const rapidjson::Value& json, const char* name, uint32_t& v)
     {
         uint64_t vv;
         if (!Parse(json, name, vv))
@@ -196,7 +196,7 @@ namespace kcfg
         return true;
     }
     template<>
-    bool Parse(const rapidjson::Value& json, const char* name, int16_t& v)
+    inline bool Parse(const rapidjson::Value& json, const char* name, int16_t& v)
     {
         int64_t vv;
         if (!Parse(json, name, vv))
@@ -211,7 +211,7 @@ namespace kcfg
         return true;
     }
     template<>
-    bool Parse(const rapidjson::Value& json, const char* name, uint16_t& v)
+    inline bool Parse(const rapidjson::Value& json, const char* name, uint16_t& v)
     {
         uint64_t vv;
         if (!Parse(json, name, vv))
@@ -226,7 +226,7 @@ namespace kcfg
         return true;
     }
     template<>
-    bool Parse(const rapidjson::Value& json, const char* name, int8_t& v)
+    inline bool Parse(const rapidjson::Value& json, const char* name, int8_t& v)
     {
         int64_t vv;
         if (!Parse(json, name, vv))
@@ -241,7 +241,7 @@ namespace kcfg
         return true;
     }
     template<>
-    bool Parse(const rapidjson::Value& json, const char* name, uint8_t& v)
+    inline bool Parse(const rapidjson::Value& json, const char* name, uint8_t& v)
     {
         int64_t vv;
         if (!Parse(json, name, vv))
@@ -257,7 +257,7 @@ namespace kcfg
     }
 
     template<typename V>
-    bool Parse(const rapidjson::Value& json, const char* name, std::map<std::string, V>& v)
+    inline bool Parse(const rapidjson::Value& json, const char* name, std::map<std::string, V>& v)
     {
         const rapidjson::Value* val = getJsonFiledValue(json, name);
         if (NULL == val)
@@ -287,7 +287,7 @@ namespace kcfg
         return true;
     }
     template<typename K>
-    bool Parse(const rapidjson::Value& json, const char* name, std::vector<K>& v)
+    inline bool Parse(const rapidjson::Value& json, const char* name, std::vector<K>& v)
     {
         const rapidjson::Value* val = getJsonFiledValue(json, name);
         if (NULL == val)
@@ -314,7 +314,7 @@ namespace kcfg
         return true;
     }
     template<typename K>
-    bool Parse(const rapidjson::Value& json, const char* name, std::deque<K>& v)
+    inline bool Parse(const rapidjson::Value& json, const char* name, std::deque<K>& v)
     {
         const rapidjson::Value* val = getJsonFiledValue(json, name);
         if (NULL == val)
@@ -341,7 +341,7 @@ namespace kcfg
         return true;
     }
     template<typename K>
-    bool Parse(const rapidjson::Value& json, const char* name, std::list<K>& v)
+    inline bool Parse(const rapidjson::Value& json, const char* name, std::list<K>& v)
     {
         const rapidjson::Value* val = getJsonFiledValue(json, name);
         if (NULL == val)
@@ -368,10 +368,10 @@ namespace kcfg
         return true;
     }
 
-    void addJsonMember(rapidjson::Value& json, rapidjson::Value::AllocatorType& allocator, const char* name,
+    inline void addJsonMember(rapidjson::Value& json, rapidjson::Value::AllocatorType& allocator, const char* name,
             rapidjson::Value& json_value)
     {
-        if (name == "")
+        if (!name[0])
         {
             json.PushBack(json_value, allocator);
         }
@@ -383,7 +383,7 @@ namespace kcfg
     }
 
     template<typename T>
-    void Serialize(rapidjson::Value& json, rapidjson::Value::AllocatorType& allocator, const char* name, const T& v)
+    inline void Serialize(rapidjson::Value& json, rapidjson::Value::AllocatorType& allocator, const char* name, const T& v)
     {
         rapidjson::Value json_value(rapidjson::kObjectType);
         v.WriteToJson(json_value, allocator);
@@ -391,7 +391,7 @@ namespace kcfg
     }
 
     template<>
-    void Serialize(rapidjson::Value& json, rapidjson::Value::AllocatorType& allocator, const char* name,
+    inline void Serialize(rapidjson::Value& json, rapidjson::Value::AllocatorType& allocator, const char* name,
             const double& v)
     {
         rapidjson::Value json_value(rapidjson::kNumberType);
@@ -400,14 +400,14 @@ namespace kcfg
     }
 
     template<>
-    void Serialize(rapidjson::Value& json, rapidjson::Value::AllocatorType& allocator, const char* name, const float& v)
+    inline void Serialize(rapidjson::Value& json, rapidjson::Value::AllocatorType& allocator, const char* name, const float& v)
     {
         rapidjson::Value json_value(rapidjson::kNumberType);
         json_value.SetDouble(v);
         addJsonMember(json, allocator, name, json_value);
     }
     template<>
-    void Serialize(rapidjson::Value& json, rapidjson::Value::AllocatorType& allocator, const char* name,
+    inline void Serialize(rapidjson::Value& json, rapidjson::Value::AllocatorType& allocator, const char* name,
             const std::string& v)
     {
         rapidjson::Value json_value(v.c_str(), v.size(),allocator);
@@ -415,7 +415,7 @@ namespace kcfg
     }
 
     template<>
-    void Serialize(rapidjson::Value& json, rapidjson::Value::AllocatorType& allocator, const char* name,
+    inline void Serialize(rapidjson::Value& json, rapidjson::Value::AllocatorType& allocator, const char* name,
             const uint64_t& v)
     {
         rapidjson::Value json_value(rapidjson::kNumberType);
@@ -424,7 +424,7 @@ namespace kcfg
     }
 
     template<>
-    void Serialize(rapidjson::Value& json, rapidjson::Value::AllocatorType& allocator, const char* name,
+    inline void Serialize(rapidjson::Value& json, rapidjson::Value::AllocatorType& allocator, const char* name,
             const int64_t& v)
     {
         rapidjson::Value json_value(rapidjson::kNumberType);
@@ -433,42 +433,42 @@ namespace kcfg
     }
 
     template<>
-    void Serialize(rapidjson::Value& json, rapidjson::Value::AllocatorType& allocator, const char* name,
+    inline void Serialize(rapidjson::Value& json, rapidjson::Value::AllocatorType& allocator, const char* name,
             const int32_t& v)
     {
         int64_t vv = v;
         Serialize(json, allocator, name, vv);
     }
     template<>
-    void Serialize(rapidjson::Value& json, rapidjson::Value::AllocatorType& allocator, const char* name,
+    inline void Serialize(rapidjson::Value& json, rapidjson::Value::AllocatorType& allocator, const char* name,
             const uint32_t& v)
     {
         uint64_t vv = v;
         Serialize(json, allocator, name, vv);
     }
     template<>
-    void Serialize(rapidjson::Value& json, rapidjson::Value::AllocatorType& allocator, const char* name,
+    inline void Serialize(rapidjson::Value& json, rapidjson::Value::AllocatorType& allocator, const char* name,
             const int16_t& v)
     {
         int64_t vv = v;
         Serialize(json, allocator, name, vv);
     }
     template<>
-    void Serialize(rapidjson::Value& json, rapidjson::Value::AllocatorType& allocator, const char* name,
+    inline void Serialize(rapidjson::Value& json, rapidjson::Value::AllocatorType& allocator, const char* name,
             const uint16_t& v)
     {
         uint64_t vv = v;
         Serialize(json, allocator, name, vv);
     }
     template<>
-    void Serialize(rapidjson::Value& json, rapidjson::Value::AllocatorType& allocator, const char* name,
+    inline void Serialize(rapidjson::Value& json, rapidjson::Value::AllocatorType& allocator, const char* name,
             const int8_t& v)
     {
         int64_t vv = v;
         Serialize(json, allocator, name, vv);
     }
     template<>
-    void Serialize(rapidjson::Value& json, rapidjson::Value::AllocatorType& allocator, const char* name,
+    inline void Serialize(rapidjson::Value& json, rapidjson::Value::AllocatorType& allocator, const char* name,
             const uint8_t& v)
     {
         uint64_t vv = v;
@@ -476,7 +476,7 @@ namespace kcfg
     }
 
     template<typename V>
-    void Serialize(rapidjson::Value& json, rapidjson::Value::AllocatorType& allocator, const char* name,
+    inline void Serialize(rapidjson::Value& json, rapidjson::Value::AllocatorType& allocator, const char* name,
             const std::map<std::string, V>& v)
     {
         rapidjson::Value json_value(rapidjson::kObjectType);
@@ -490,7 +490,7 @@ namespace kcfg
         addJsonMember(json, allocator, name, json_value);
     }
     template<typename K>
-    void Serialize(rapidjson::Value& json, rapidjson::Value::AllocatorType& allocator, const char* name,
+    inline void Serialize(rapidjson::Value& json, rapidjson::Value::AllocatorType& allocator, const char* name,
             const std::deque<K>& v)
     {
         rapidjson::Value json_value(rapidjson::kArrayType);
@@ -502,7 +502,7 @@ namespace kcfg
         addJsonMember(json, allocator, name, json_value);
     }
     template<typename K>
-    void Serialize(rapidjson::Value& json, rapidjson::Value::AllocatorType& allocator, const char* name,
+    inline void Serialize(rapidjson::Value& json, rapidjson::Value::AllocatorType& allocator, const char* name,
             const std::vector<K>& v)
     {
         rapidjson::Value json_value(rapidjson::kArrayType);
@@ -514,7 +514,7 @@ namespace kcfg
         addJsonMember(json, allocator, name, json_value);
     }
     template<typename K>
-    void Serialize(rapidjson::Value& json, rapidjson::Value::AllocatorType& allocator, const char* name,
+    inline void Serialize(rapidjson::Value& json, rapidjson::Value::AllocatorType& allocator, const char* name,
             const std::list<K>& v)
     {
         rapidjson::Value json_value(rapidjson::kArrayType);
@@ -528,7 +528,7 @@ namespace kcfg
         addJsonMember(json, allocator, name, json_value);
     }
     template<typename T>
-    bool ParseFromJsonString(const std::string& content, T& v)
+    inline bool ParseFromJsonString(const std::string& content, T& v)
     {
         rapidjson::Document d;
         d.Parse<0>(content.c_str());
@@ -541,7 +541,7 @@ namespace kcfg
     }
 
     template<typename T>
-    bool ParseFromJsonFile(const std::string& file, T& v)
+    inline bool ParseFromJsonFile(const std::string& file, T& v)
     {
         FILE *fp;
         if ((fp = fopen(file.c_str(), "rb")) == NULL)
@@ -573,7 +573,7 @@ namespace kcfg
     }
 
     template<typename T>
-    int WriteToJsonString(const T& v, std::string& content)
+    inline int WriteToJsonString(const T& v, std::string& content)
     {
         rapidjson::Value::AllocatorType allocator;
         rapidjson::Value doc(rapidjson::kObjectType);
@@ -586,7 +586,7 @@ namespace kcfg
     }
 
     template<typename T>
-    int WriteToJsonFile(const T& v, const std::string& file)
+    inline int WriteToJsonFile(const T& v, const std::string& file)
     {
         std::string content;
         int ret = WriteToJsonString(v, content);
