@@ -536,8 +536,7 @@ namespace kcfg
         {
             return false;
         }
-        v.PraseFromJson(d);
-        return true;
+        return Parse(d, "", v);
     }
 
     template<typename T>
