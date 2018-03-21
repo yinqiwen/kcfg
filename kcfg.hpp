@@ -259,11 +259,16 @@ namespace kcfg
     template<>
     inline bool Parse(const rapidjson::Value& json, const char* name, bool& v)
     {
-        if (!json.IsBool())
+        const rapidjson::Value* val = getJsonFiledValue(json, name);
+        if (NULL == val)
         {
             return false;
         }
-        v = json.GetBool();
+        if (!val->IsBool())
+        {
+            return false;
+        }
+        v = val->GetBool();
         return true;
     }
 
