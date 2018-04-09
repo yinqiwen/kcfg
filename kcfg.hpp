@@ -69,7 +69,7 @@ namespace kcfg
         {
             return false;
         }
-        return v.PraseFromJson(*val);
+        return v.ParseFromJson(*val);
     }
 
     template<>
@@ -854,7 +854,7 @@ namespace kcfg
 #define KCFG_SERIALIZE_JSON(field)   kcfg::Serialize(json, allocator, #field, field)
 //#define PRN_FIELD(field)  printf("%s\n", #field)
 #define KCFG_DEFINE_FIELDS(...) \
-    bool PraseFromJson(const rapidjson::Value& json)  \
+    bool ParseFromJson(const rapidjson::Value& json)  \
     { \
          KCFG_FOR_EACH(KCFG_PARSE_JSON, __VA_ARGS__)\
          return true; \
