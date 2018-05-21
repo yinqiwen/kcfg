@@ -404,6 +404,10 @@ namespace kcfg
     {
         rapidjson::Value json_value(rapidjson::kObjectType);
         v.WriteToJson(json_value, allocator);
+        if(name[0] && 0 == json_value.MemberCount())
+        {
+            return;
+        }
         addJsonMember(json, allocator, name, json_value);
     }
 
@@ -411,6 +415,10 @@ namespace kcfg
     inline void Serialize(rapidjson::Value& json, rapidjson::Value::AllocatorType& allocator, const char* name,
             const double& v)
     {
+        if(0 == v && name[0])
+        {
+            return;
+        }
         rapidjson::Value json_value(rapidjson::kNumberType);
         json_value.SetDouble(v);
         addJsonMember(json, allocator, name, json_value);
@@ -420,6 +428,10 @@ namespace kcfg
     inline void Serialize(rapidjson::Value& json, rapidjson::Value::AllocatorType& allocator, const char* name,
             const float& v)
     {
+        if( 0 == v && name[0])
+        {
+            return;
+        }
         rapidjson::Value json_value(rapidjson::kNumberType);
         json_value.SetDouble(v);
         addJsonMember(json, allocator, name, json_value);
@@ -428,6 +440,10 @@ namespace kcfg
     inline void Serialize(rapidjson::Value& json, rapidjson::Value::AllocatorType& allocator, const char* name,
             const std::string& v)
     {
+        if(v.empty() && name[0])
+        {
+            return;
+        }
         rapidjson::Value json_value(v.c_str(), v.size(), allocator);
         addJsonMember(json, allocator, name, json_value);
     }
@@ -435,6 +451,10 @@ namespace kcfg
     inline void Serialize(rapidjson::Value& json, rapidjson::Value::AllocatorType& allocator, const char* name,
             const bool& v)
     {
+        if(!v && name[0])
+        {
+            return;
+        }
         rapidjson::Value json_value(rapidjson::kNumberType);
         json_value.SetBool(v);
         addJsonMember(json, allocator, name, json_value);
@@ -443,6 +463,10 @@ namespace kcfg
     inline void Serialize(rapidjson::Value& json, rapidjson::Value::AllocatorType& allocator, const char* name,
             const uint64_t& v)
     {
+        if(0 == v && name[0])
+        {
+            return;
+        }
         rapidjson::Value json_value(rapidjson::kNumberType);
         json_value.SetUint64(v);
         addJsonMember(json, allocator, name, json_value);
@@ -452,6 +476,10 @@ namespace kcfg
     inline void Serialize(rapidjson::Value& json, rapidjson::Value::AllocatorType& allocator, const char* name,
             const int64_t& v)
     {
+        if(0 == v && name[0])
+        {
+            return;
+        }
         rapidjson::Value json_value(rapidjson::kNumberType);
         json_value.SetInt64(v);
         addJsonMember(json, allocator, name, json_value);
@@ -461,6 +489,10 @@ namespace kcfg
     inline void Serialize(rapidjson::Value& json, rapidjson::Value::AllocatorType& allocator, const char* name,
             const int32_t& v)
     {
+        if(0 == v && name[0])
+        {
+            return;
+        }
         int64_t vv = v;
         Serialize(json, allocator, name, vv);
     }
@@ -468,6 +500,10 @@ namespace kcfg
     inline void Serialize(rapidjson::Value& json, rapidjson::Value::AllocatorType& allocator, const char* name,
             const uint32_t& v)
     {
+        if(0 == v && name[0])
+        {
+            return;
+        }
         uint64_t vv = v;
         Serialize(json, allocator, name, vv);
     }
@@ -475,6 +511,10 @@ namespace kcfg
     inline void Serialize(rapidjson::Value& json, rapidjson::Value::AllocatorType& allocator, const char* name,
             const int16_t& v)
     {
+        if(0 == v && name[0])
+        {
+            return;
+        }
         int64_t vv = v;
         Serialize(json, allocator, name, vv);
     }
@@ -482,6 +522,10 @@ namespace kcfg
     inline void Serialize(rapidjson::Value& json, rapidjson::Value::AllocatorType& allocator, const char* name,
             const uint16_t& v)
     {
+        if(0 == v && name[0])
+        {
+            return;
+        }
         uint64_t vv = v;
         Serialize(json, allocator, name, vv);
     }
@@ -489,6 +533,10 @@ namespace kcfg
     inline void Serialize(rapidjson::Value& json, rapidjson::Value::AllocatorType& allocator, const char* name,
             const int8_t& v)
     {
+        if(0 == v && name[0])
+        {
+            return;
+        }
         int64_t vv = v;
         Serialize(json, allocator, name, vv);
     }
@@ -496,6 +544,10 @@ namespace kcfg
     inline void Serialize(rapidjson::Value& json, rapidjson::Value::AllocatorType& allocator, const char* name,
             const uint8_t& v)
     {
+        if(0 == v && name[0])
+        {
+            return;
+        }
         uint64_t vv = v;
         Serialize(json, allocator, name, vv);
     }
@@ -504,6 +556,10 @@ namespace kcfg
     inline void Serialize(rapidjson::Value& json, rapidjson::Value::AllocatorType& allocator, const char* name,
             const std::map<std::string, V>& v)
     {
+        if(v.empty() && name[0])
+        {
+            return;
+        }
         rapidjson::Value json_value(rapidjson::kObjectType);
         typename std::map<std::string, V>::const_iterator it = v.begin();
         while (it != v.end())
@@ -518,6 +574,10 @@ namespace kcfg
     inline void Serialize(rapidjson::Value& json, rapidjson::Value::AllocatorType& allocator, const char* name,
             const std::deque<K>& v)
     {
+        if(v.empty() && name[0])
+        {
+            return;
+        }
         rapidjson::Value json_value(rapidjson::kArrayType);
         for (size_t i = 0; i < v.size(); i++)
         {
@@ -530,6 +590,10 @@ namespace kcfg
     inline void Serialize(rapidjson::Value& json, rapidjson::Value::AllocatorType& allocator, const char* name,
             const std::vector<K>& v)
     {
+        if(v.empty() && name[0])
+        {
+            return;
+        }
         rapidjson::Value json_value(rapidjson::kArrayType);
         for (size_t i = 0; i < v.size(); i++)
         {
@@ -542,6 +606,10 @@ namespace kcfg
     inline void Serialize(rapidjson::Value& json, rapidjson::Value::AllocatorType& allocator, const char* name,
             const std::list<K>& v)
     {
+        if(v.empty() && name[0])
+        {
+            return;
+        }
         rapidjson::Value json_value(rapidjson::kArrayType);
         typename std::list<K>::const_iterator cit = v.begin();
         while (cit != v.end())
