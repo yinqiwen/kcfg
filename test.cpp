@@ -106,7 +106,7 @@ int main(int argc, char *argv[])
     macros.append("\n");
     macros.append("#define KCFG_RSEQ_N() \\\n");
     std::deque<int> cc;
-    for (int i = 0; i < N - 1; i++)
+    for (int i = 0; i < N ; i++)
     {
         cc.push_front(i);
     }
