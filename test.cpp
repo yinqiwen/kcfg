@@ -27,32 +27,29 @@
  *THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #include "kcfg.hpp"
 
 struct ConfigItem
 {
         int v0;
-        int y0;
-        KCFG_DEFINE_FIELDS(v0, y0);
+        int y0;KCFG_DEFINE_FIELDS(v0, y0)
+        ;
 };
 
 struct Config
 {
         int64_t x;
-        int y;
+        float y;
         float z;
         std::string aa;
         std::map<std::string, int> m1;
         std::vector<std::string> v2;
-        std::vector<ConfigItem> v3;
-        KCFG_DEFINE_FIELDS(x, y, z, aa, m1, v2, v3)
+        std::vector<ConfigItem> v3;KCFG_DEFINE_FIELDS(x, y, z, aa, m1, v2, v3)
         Config()
                 : x(0), y(0), z(0)
         {
         }
 };
-
 
 int main(int argc, char *argv[])
 {
@@ -69,20 +66,71 @@ int main(int argc, char *argv[])
     cfg.v3[1].y0 = 987;
     std::string kstr;
     kcfg::WriteToJsonString(cfg, kstr);
-    printf("%s\n",kstr.c_str());
+    printf("%s\n", kstr.c_str());
 
-//    std::string macros;
-//    for( int i = 1; i < 64; i++)
-//    {
-//        char buffer[1024];
-//        sprintf(buffer, "#define KCFG_FOR_EACH_%d(what, x, ...)\\", i+1);
-//        macros.append(buffer).append("\n");
-//        macros.append("  what(x);\\").append("\n");
-//        sprintf(buffer, "  KCFG_FOR_EACH_%d(what,  __VA_ARGS__)", i);
-//        macros.append(buffer).append("\n");
-//    }
-//
-//    printf("%s\n",macros.c_str());
+    int N = 256;
+    int unit = 10;
+    int batch = N / unit;
+    int rest = N % unit;
+    std::string macros;
+    for (int i = 1; i < N; i++)
+    {
+        char buffer[1024];
+        sprintf(buffer, "#define KCFG_FOR_EACH_%d(what, x, ...)\\", i + 1);
+        macros.append(buffer).append("\n");
+        macros.append("  what(x);\\").append("\n");
+        sprintf(buffer, "  KCFG_FOR_EACH_%d(what,  __VA_ARGS__)", i);
+        macros.append(buffer).append("\n");
+    }
+    macros.append("\n");
+    macros.append("#define KCFG_NARG_(...)  KCFG_NARG_I_(__VA_ARGS__,KCFG_RSEQ_N())\n");
+    macros.append("#define KCFG_NARG_I_(...) KCFG_ARG_N(__VA_ARGS__)\n");
+    macros.append("#define KCFG_ARG_N( \\\n");
+    for (int i = 0; i < batch; i++)
+    {
+        for (int j = 0; j < unit; j++)
+        {
+            char v[100];
+            sprintf(v, "_%d,", i * unit + j + 1);
+            macros.append(v);
+        }
+        macros.append("\\ \n");
+    }
+    for (int i = 0; i < rest - 1; i++)
+    {
+        char v[100];
+        sprintf(v, "_%d,", batch * unit + i + 1);
+        macros.append(v);
+    }
+    macros.append("N,...) N\n");
+    macros.append("\n");
+    macros.append("#define KCFG_RSEQ_N() \\\n");
+    std::deque<int> cc;
+    for (int i = 0; i < N - 1; i++)
+    {
+        cc.push_front(i);
+    }
+    while (!cc.empty())
+    {
+        int vv = cc.front();
+        cc.pop_front();
+        char v[100];
+        if (vv == 0)
+        {
+            sprintf(v, "%d", vv);
+        }
+        else
+        {
+            sprintf(v, "%d,", vv);
+        }
+        macros.append(v);
+        if (vv % 10 == 0 && vv != 0)
+        {
+            macros.append("\\\n");
+        }
+    }
+
+    printf("%s\n", macros.c_str());
 
     return 0;
 }
