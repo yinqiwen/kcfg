@@ -9,7 +9,7 @@ A C++ json config mapping library.
 
 ## Limit
 - Only works with GCC
-- Max 64 fields in a struct/class
+- Max 256 fields in a struct/class
 
 ## Example
 
@@ -61,6 +61,4 @@ int main(int argc, char *argv[])
 }
 ```
 
-## Embedding kcfg
 
-Just copy [kcfg.hpp](https://github.com/yinqiwen/kcfg/blob/master/kcfg.hpp)  into your project. 
