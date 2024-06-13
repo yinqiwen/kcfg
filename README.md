@@ -1,26 +1,34 @@
 kcfg
 ======
 
-A C++ json config mapping library. 
+A head-only C++ json/toml/yaml config mapping library. 
 
 ## Dependency
 
 [rapidjson](https://github.com/Tencent/rapidjson)
+[toml](https://github.com/ToruNiina/toml11)
+[yaml](https://github.com/jbeder/yaml-cpp)
 
 ## Limit
-- Only works with GCC
+- C++17
 - Max 256 fields in a struct/class
 
 ## Example
 
 ```cpp
-#include "kcfg.hpp"
+#include "kcfg_json.h"
+#include "kcfg_toml.h"
+#include "kcfg_yaml.h"
 
 struct ConfigItem
 {
         int v0;
         int y0;
         KCFG_DEFINE_FIELDS(v0, y0);
+
+        KCFG_YAML_DEFINE_FIELDS(v0, y0);
+
+        KCFG_TOML_DEFINE_FIELDS(v0, y0);
 };
 
 struct Config
@@ -32,7 +40,13 @@ struct Config
         std::map<std::string, int> m1;
         std::vector<std::string> v2;
         std::vector<ConfigItem> v3;
-        KCFG_DEFINE_FIELDS(x, y, z, aa, m1, v2, v3)
+
+        KCFG_DEFINE_FIELDS(x, y, z, aa, m1, v2, v3);
+
+        KCFG_YAML_DEFINE_FIELDS(x, y, z, aa, m1, v2, v3);
+
+        KCFG_TOML_DEFINE_FIELDS(x, y, z, aa, m1, v2, v3);
+
         Config()
                 : x(0), y(0), z(0)
         {
@@ -47,6 +61,8 @@ int main(int argc, char *argv[])
 
     Config cfg;
     kcfg::ParseFromJsonString(json, cfg);
+    // kcfg::ParseFromTomlString(content, t);
+    // kcfg::ParseFromYamlString(content, t);
 
     cfg.v2.push_back("testa");
     cfg.v2.push_back("testv");
@@ -61,4 +77,6 @@ int main(int argc, char *argv[])
 }
 ```
 
+## Embedding kcfg
 
+Just copy all headers into your project. 
