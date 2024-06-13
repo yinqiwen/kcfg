@@ -64,7 +64,7 @@ namespace kcfg {
   }
 
 template <typename T>
-static const char* GetFieldYamlName(T* t, const char* v) {
+static const char* GetFieldYamlName(T* t [[maybe_unused]], const char* v) {
   if constexpr (HasGetFieldName<T>::value) {
     return t->GetFieldName(v);
   } else {
