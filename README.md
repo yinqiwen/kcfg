@@ -5,9 +5,9 @@ A head-only C++ json/toml/yaml config mapping library.
 
 ## Dependency
 
-[rapidjson](https://github.com/Tencent/rapidjson)
-[toml](https://github.com/ToruNiina/toml11)
-[yaml](https://github.com/jbeder/yaml-cpp)
+- [rapidjson](https://github.com/Tencent/rapidjson)
+- [toml](https://github.com/ToruNiina/toml11)
+- [yaml](https://github.com/jbeder/yaml-cpp)
 
 ## Limit
 - C++17
